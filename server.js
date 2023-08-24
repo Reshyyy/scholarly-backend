@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173"],
-    methods: ["POST", "GET"],
+    methods: ["POST", "GET", "PUT"],
     credentials: true
 }));
 
@@ -181,3 +181,85 @@ app.get('/api/data', (req, res) => {
       }
     });
   });
+
+// Delete Scholarship API
+app.delete('/api/scholarships/:id', (req, res) => {
+    const scholarshipId = req.params.id;
+    const sql = 'DELETE FROM scholarships WHERE id = ?';
+
+    db.query(sql, [scholarshipId], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Error deleting scholarship' });
+        }
+        console.log('Scholarship deleted successfully:', result);
+        return res.json({ status: 'Success' });
+    });
+});
+
+// API endpoint to fetch applicants' data
+app.get('/api/applicants', (req, res) => {
+    const sql = 'SELECT * FROM applicant_account';
+  
+    db.query(sql, (error, results) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching data' });
+      } else {
+        res.json(results);
+      }
+    });
+});
+
+// API endpoint to fetch providers' data
+app.get('/api/provider', (req, res) => {
+    const sql = 'SELECT * FROM grantor_account'; // Use the correct table name for providers
+  
+    db.query(sql, (error, results) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching data' });
+      } else {
+        res.json(results);
+      }
+    });
+});
+
+
+// Update Applicant API
+app.put('/api/update-applicant/:applicantId', (req, res) => {
+    const applicantId = req.params.applicantId;
+    const { firstname, lastname, email } = req.body;
+  
+    const sql = 'UPDATE applicant_account SET firstname = ?, lastname = ?, email = ? WHERE id = ?';
+  
+    db.query(sql, [firstname, lastname, email, applicantId], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Error updating applicant' });
+      }
+      console.log('Applicant updated successfully:', result);
+      return res.json({ status: 'Success' });
+    });
+});
+
+
+// Update Provider API
+app.put('/api/update-provider/:providerId', (req, res) => {
+    const providerId = req.params.providerId;
+    const { organization_name, firstname, lastname, email } = req.body;
+    
+    const sql = 'UPDATE grantor_account SET organization_name = ?, firstname = ?, lastname = ?, email = ? WHERE id = ?';
+    
+    db.query(sql, [organization_name, firstname, lastname, email, providerId], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Error updating provider' });
+      }
+      console.log('Provider updated successfully:', result);
+      return res.json({ status: 'Success' });
+    });
+});
+
+
+  
