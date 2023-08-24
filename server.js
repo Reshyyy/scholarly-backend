@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173"],
-    methods: ["POST", "GET", "PUT"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 
@@ -213,7 +213,7 @@ app.get('/api/applicants', (req, res) => {
 
 // API endpoint to fetch providers' data
 app.get('/api/provider', (req, res) => {
-    const sql = 'SELECT * FROM grantor_account'; // Use the correct table name for providers
+    const sql = 'SELECT * FROM grantor_account';
   
     db.query(sql, (error, results) => {
       if (error) {
@@ -230,9 +230,9 @@ app.get('/api/provider', (req, res) => {
 app.put('/api/update-applicant/:applicantId', (req, res) => {
     const applicantId = req.params.applicantId;
     const { firstname, lastname, email } = req.body;
-  
+    
     const sql = 'UPDATE applicant_account SET firstname = ?, lastname = ?, email = ? WHERE id = ?';
-  
+    
     db.query(sql, [firstname, lastname, email, applicantId], (err, result) => {
       if (err) {
         console.error(err);
@@ -262,4 +262,20 @@ app.put('/api/update-provider/:providerId', (req, res) => {
 });
 
 
+// Delete User API
+app.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    const sql = 'DELETE FROM applicant_account WHERE id = ?';
+  
+    db.query(sql, [userId], (error, result) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error deleting user' });
+      } else {
+        console.log('User deleted successfully:', result);
+        res.json({ status: 'Success' });
+      }
+    });
+  });
+  
   
