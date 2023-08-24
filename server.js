@@ -4,9 +4,6 @@ import cors from 'cors'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
-import path from 'path';
-
-
 
 const salt = 10;
 
@@ -17,6 +14,7 @@ app.use(cors({
     methods: ["POST", "GET"],
     credentials: true
 }));
+
 app.use(cookieParser());
 
 const db = mysql.createConnection({
@@ -26,20 +24,23 @@ const db = mysql.createConnection({
     database: 'scholarly'
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-    } else {
-        console.log('Connected to the database');
-    }
-});
-
-app.use(cors());
+// db.connect((err) => {
+//     if (err) {
+//         console.error('Error connecting to the database:', err);
+//     } else {
+//         console.log('Connected to the database');
+//     }
+// });
 
 
-const port = 8081;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+
+// const port = 8081;
+// app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
+
+app.listen(8081, () => {
+    console.log('Server is running on port 8081');
 });
 
 //register API for Applicant
@@ -86,39 +87,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-// // Register API for Grantor
-// app.post('/grantor-register', async (req, res) => {
-//     try {
-//         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-//         // Extract the image data from the FormData
-//         const logoImage = req.body.logo_image[0].buffer;
-
-//         const sql = 'INSERT INTO scholarship_providers (organization_name, contact_name, contact_email, phone_number, organization_type, mission_statement, logo_image, website_url, address, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-//         const values = [
-//             req.body.organization_name,
-//             req.body.contact_name,
-//             req.body.contact_email,
-//             req.body.phone_number,
-//             req.body.organization_type,
-//             req.body.mission_statement,
-//             logoImage, // Insert the binary image data
-//             req.body.website_url,
-//             req.body.address,
-//             req.body.username,
-//             hashedPassword,
-//         ];
-
-//         db.query(sql, values, (err, result) => {
-//             if (err) {
-//                 return res.json({ Error: 'Error inserting data into database' });
-//             }
-//             return res.json({ Status: 'Success' });
-//         });
-//     } catch (error) {
-//         return res.json({ Error: 'Error processing registration' });
-//     }
-// });
 
 //login API for admin
 app.post('/admin-login', (req, res) => {
@@ -137,24 +105,6 @@ app.post('/admin-login', (req, res) => {
     });
 });
 
-// //register API for Grantor
-// app.post('/grantor-register2', (req, res) => {
-//     const sql = 'INSERT INTO grantor_account (organization_name, firstname, lastname, email, password) VALUES (?, ?, ?, ?, ?)';
-//     const values = [
-//         req.body.organization_name,
-//         req.body.firstname,
-//         req.body.lastname,
-//         req.body.email,
-//         req.body.password
-//     ];
-
-//     db.query(sql, values, (err, result) => {
-//         if (err) {
-//             return res.json({ Error: 'Error inserting data into database' });
-//         }
-//         return res.json({ Status: 'Success' });
-//     });
-// });
 
 //register API for Grantor
 app.post('/grantor-register2', (req, res) => {
@@ -216,30 +166,6 @@ app.post('/add_scholarship', (req, res) => {
 
 });
 
-
-// // Get Scholarships API
-// app.get('/grantor-manage-scholarship/get-scholarships', (req, res) => {
-//     const sql = 'SELECT * FROM scholarships';
-    
-//     db.query(sql, (err, data) => {
-//         if (err) {
-//             return res.json({ Error: 'Error fetching scholarships' });
-//         }
-//         return res.json(data);
-//     });
-// });
-
-// // Create a GET endpoint to fetch data from the database
-// app.get('/get-scholarships', (req, res) => {
-//     const sql = 'SELECT * FROM scholarships'; // Adjust this query according to your schema
-    
-//     db.query(sql, (err, data) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Error fetching scholarships' });
-//         }
-//         return res.json(data);
-//     });
-// });
 
 
 // Create an API endpoint to fetch scholarship data
