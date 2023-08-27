@@ -227,7 +227,7 @@ app.get('/api/provider', (req, res) => {
 
 
 // Update Applicant API
-app.put('/api/update-applicant/:applicantId', (req, res) => {
+app.put('/api/update-user/:applicantId', (req, res) => {
     const applicantId = req.params.applicantId;
     const { firstname, lastname, email } = req.body;
     
@@ -245,7 +245,7 @@ app.put('/api/update-applicant/:applicantId', (req, res) => {
 
 
 // Update Provider API
-app.put('/api/update-provider/:providerId', (req, res) => {
+app.put('/api/update-user/:providerId', (req, res) => {
     const providerId = req.params.providerId;
     const { organization_name, firstname, lastname, email } = req.body;
     
