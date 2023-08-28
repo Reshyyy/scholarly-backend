@@ -180,7 +180,30 @@ app.get('/api/data', (req, res) => {
         res.json(results);
       }
     });
-  });
+});
+
+
+// Fetch scholarship details by ID
+app.get('/api/scholarships/:scholarshipId', (req, res) => {
+    const scholarshipId = req.params.scholarshipId;
+    
+    const sql = 'SELECT * FROM scholarships WHERE id = ?';
+    
+    db.query(sql, [scholarshipId], (error, result) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Error fetching scholarship details' });
+        }
+        
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Scholarship not found' });
+        }
+        
+        const scholarshipDetails = result[0];
+        res.json(scholarshipDetails);
+    });
+});
+
 
 // Delete Scholarship API
 app.delete('/api/scholarships/:id', (req, res) => {
